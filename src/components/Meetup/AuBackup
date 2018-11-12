@@ -1,0 +1,106 @@
+<template>
+  <v-container>
+    <v-layout row wrap>
+      <v-flex xs12 sm10 offset-sm1 md8 offset-md2  lg4 offset-lg4>
+        <v-card>
+          <v-card-title class="pb-0">
+            <h6 class="primary--text">
+              <!-- {{ meetup.title}} -->
+              Аукцион еще не начался
+            </h6>
+          </v-card-title>
+          <v-carousel>
+              <v-carousel-item v-for="(item,i) in meetup.images" v-bind:src="item.src" :key="i"></v-carousel-item>
+            </v-carousel>
+          <v-card-text class="pt-2 pb-2 pl-0 pr-0">
+             <v-container pt-0 pb-0 pl-0 pr-0>
+                  <v-layout  row wrap>
+                      <v-flex class=" xs12 pt-2 pb-2 pl-4 pr-4">
+                       <h5 class="darken-4" style="color:#424242">
+                            Минимальная ставка :
+                            <b class="black--text">{{ meetup.price }} сом</b>
+                        </h5>
+                        
+                      </v-flex>
+                      <v-flex xs12 >
+                        <v-expansion-panel>
+                        <v-expansion-panel-content>
+                          <div slot="header">Детали лота</div>
+                          <v-card>
+                            <v-card-text class="grey lighten-3">
+                              {{meetup.description}}
+                            </v-card-text>
+                          </v-card>
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+                      </v-flex>
+                      
+                      
+                  </v-layout>
+              </v-container>
+              
+          </v-card-text>
+          
+        </v-card>
+        <v-btn block large primary xs12  @click.native.stop="dialog = true"  slot="activator">Поставить</v-btn>
+        
+      </v-flex>
+      
+    </v-layout>
+    <v-dialog v-model="dialog" persistent>
+        
+          <v-card>
+            <v-card-title class="headline"> Минимальная цена: {{meetup.price}} сом</v-card-title>
+            <v-card-text>
+                <v-text-field
+                  name="input-1"
+                  label="Ваша цена"
+                  id="bet_price"
+                  v-model="ur_price"
+                  type="number"
+                ></v-text-field>
+                <v-checkbox v-model="agreed" label="Ок, согласен"></v-checkbox>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Agree</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+  </v-container>
+  
+</template>
+
+<script>
+  export default {
+    data(){
+        return{
+            agreed: false,
+            dialog: false
+        }
+    },
+    props: ['id'],
+    computed: {
+      auction(){
+        return this.$store.getters.auction
+        console.log(this.$store.getters.auction)
+      },
+      meetup () {
+        return this.$store.getters.loadedMeetup('-Kt8jNkwRChZ0HI1eRoU')
+      },
+      ur_price(){
+        return this.meetup.price
+      }
+    }
+  }
+</script>
+<style scoped>
+  .title {
+    position: absolute;
+    bottom: 50px;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    font-size: 2em;
+    padding: 20px;
+  }
+</style>
